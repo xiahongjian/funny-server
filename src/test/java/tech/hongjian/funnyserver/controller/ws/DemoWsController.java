@@ -18,17 +18,17 @@ public class DemoWsController {
 	
 	@OnOpen
 	public void onOpen(WebSocketContext ctx) {
-		log.info("ws connection is opent");
+		log.info("ws connection is open, SessionID: {}", ctx.session().uuid());
 	}
 	
 	@OnClose
 	public void onClose(WebSocketContext ctx) {
-		log.info("ws connection is colse");
+		log.info("ws connection is colse, SessionID: {}", ctx.session().uuid());
 	}
 	
 	@OnMessage
 	public void onMessage(WebSocketContext ctx) {
-		log.info(ctx.message());
+		log.info("Received message: {}, SessionID: {}", ctx.message(), ctx.session().uuid());
 	}
 
 }

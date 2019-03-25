@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import io.netty.util.concurrent.FastThreadLocal;
+import lombok.extern.slf4j.Slf4j;
 import tech.hongjian.funnyserver.annnotation.OnClose;
 import tech.hongjian.funnyserver.annnotation.OnMessage;
 import tech.hongjian.funnyserver.annnotation.OnOpen;
@@ -20,17 +21,22 @@ import tech.hongjian.funnyserver.util.scanner.BeanContainer;
  * @time 2019-03-22 16:09:36
  *
  */
+@Slf4j
 public class WebSocketHandlerWrapper implements WebSocketHandler {
 
 	private Map<String, Class<?>> handlers = new HashMap<>(4);
 	private Map<String, Map<Class<? extends Annotation>, Method>> methodCache = new HashMap<>();
 	private FastThreadLocal<String> path = new FastThreadLocal<>();
 
+	public static WebSocketHandlerWrapper instance() {
+		return new WebSocketHandlerWrapper();
+	}
+	
 	public void setPath(String path) {
 		this.path.set(path);
 	}
 
-	public WebSocketHandlerWrapper wrapHandler(String path, Class<?> handler) {
+	public void wrapHandler(String path, Class<?> handler) {
 		Method[] methods = handler.getMethods();
 		Map<Class<? extends Annotation>, Method> cache = new HashMap<>(3);
 		cacheMethod(cache, methods, OnOpen.class);
@@ -40,7 +46,7 @@ public class WebSocketHandlerWrapper implements WebSocketHandler {
 			methodCache.put(path, cache);
 			handlers.put(path, handler);
 		}
-		return this;
+		log.info("Regist WebSocket Hanlder: [{}], handler: {}", path, handler.getName());
 	}
 
 	private static void cacheMethod(Map<Class<? extends Annotation>, Method> cache, Method[] methods,

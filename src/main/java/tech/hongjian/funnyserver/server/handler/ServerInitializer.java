@@ -12,6 +12,7 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import tech.hongjian.funnyserver.annnotation.WSContorller;
 import tech.hongjian.funnyserver.config.ServerConfig;
+import tech.hongjian.funnyserver.route.RoutesManager;
 import tech.hongjian.funnyserver.util.scanner.BeanContainer;
 import tech.hongjian.funnyserver.util.scanner.reader.DynamicContext;
 
@@ -25,6 +26,7 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
 					.map(classInfo -> classInfo.getClazz()).collect(Collectors.toSet());
 			BeanContainer.add(classes);
 		}
+		RoutesManager.init();
 	}
 
 	@Override

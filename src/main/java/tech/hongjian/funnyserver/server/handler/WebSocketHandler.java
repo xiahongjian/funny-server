@@ -46,6 +46,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
 	private void handleWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame msg) {
 		if (msg instanceof CloseWebSocketFrame) {
 			handshaker.close(ctx.channel(), (CloseWebSocketFrame) msg.retain());
+			initHandlerWrapper();
 			CompletableFuture.completedFuture(new WebSocketContext(session, handler))
 					.thenAcceptAsync(handler::onDisconnect);
 			return;
@@ -85,7 +86,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
 	}
 
 	private boolean isWebSocketRequest(HttpRequest req) {
-		return req != null && RoutesManager.getWebSocket(req.uri()) != null && req.decoderResult().isSuccess()
+		return req != null && ((handler = RoutesManager.getWebSocket(req.uri())) != null) && req.decoderResult().isSuccess()
 				&& "websocket".equals(req.headers().get("Upgrade"));
 	}
 

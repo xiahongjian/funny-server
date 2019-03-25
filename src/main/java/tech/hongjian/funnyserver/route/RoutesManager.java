@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import io.netty.handler.codec.http.HttpMethod;
 import lombok.extern.slf4j.Slf4j;
 import tech.hongjian.funnyserver.annnotation.Controller;
 import tech.hongjian.funnyserver.annnotation.WSContorller;
@@ -29,16 +28,15 @@ import tech.hongjian.funnyserver.util.scanner.reader.DynamicContext;
 @Slf4j
 public class RoutesManager {
 	private static final Map<Router, RequestMapingHandler> routeMap = new HashMap<>();
-	private static final Map<String, WebSocketHandler> webSocketMap = new HashMap<>();
-	static {
-		init();
-		printRoute();
-	}
+	private static WebSocketHandlerWrapper wsHandler;
+
 
 	public static void init() {
 		handleStaticResource();
 		// handleRequestMapping();
 		handleWebSocket();
+		
+		printRoute();
 	}
 
 	private static void handleWebSocket() {
@@ -47,7 +45,10 @@ public class RoutesManager {
 				.forEach(info -> {
 					WSContorller ws = info.getClazz().getAnnotation(WSContorller.class);
 					String path = ws.value();
-					webSocketMap.put(path, new WebSocketHandlerWrapper().wrapHandler(path, info.getClazz()));
+					if (wsHandler == null) {
+						wsHandler = WebSocketHandlerWrapper.instance();
+					}
+					wsHandler.wrapHandler(path, info.getClazz());
 				});
 
 	}
@@ -102,12 +103,12 @@ public class RoutesManager {
 		return StringUtils.join("/", pathes).replaceAll("/{2,}", "/");
 	}
 
-	public static boolean hasResource(String url, HttpMethod method) {
+	public static boolean hasResource(String url, String method) {
 		return getHandler(url, method) != null;
 	}
 
-	public static RequestMapingHandler getHandler(String url, HttpMethod method) {
-		RequestMapingHandler handler = routeMap.get(Router.of(url, method.name()));
+	public static RequestMapingHandler getHandler(String url, String method) {
+		RequestMapingHandler handler = routeMap.get(Router.of(url, method));
 		if (handler == null) {
 			handler = routeMap.get(Router.of(url, "*"));
 		}
@@ -115,7 +116,8 @@ public class RoutesManager {
 	}
 
 	public static WebSocketHandler getWebSocket(String url) {
-		return webSocketMap.get(url);
+		wsHandler.setPath(url);
+		return wsHandler;
 	}
 
 	public static Response request(Request request) {
@@ -125,7 +127,7 @@ public class RoutesManager {
 
 	private static void printRoute() {
 		routeMap.forEach((k, v) -> {
-			log.info("{}: {}, handler: {}", k.path(), k.method(), v.toString());
+			log.info("Regist Resource Handler: [{}], method: {}, handler: {}", k.path(), k.method(), v.toString());
 		});
 	}
 }

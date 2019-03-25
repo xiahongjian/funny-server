@@ -3,9 +3,6 @@ package tech.hongjian.funnyserver.server.handler;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -28,7 +25,6 @@ import tech.hongjian.funnyserver.route.Response;
  */
 @Slf4j
 public class HttpServerHandler extends ChannelInboundHandlerAdapter {
-	private final Logger logger = LoggerFactory.getLogger(HttpServerHandler.class);
 	
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -72,7 +68,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		ctx.close();
-		logger.error(cause.getMessage(), cause);
+		log.error(cause.getMessage(), cause);
 	}
 
 	@Override
