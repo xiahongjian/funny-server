@@ -1,17 +1,22 @@
 <html>
 	<head>
 		<title>Index</title>
-		<script type="text/javascript" src="common.js"></script>
+		<style type="text/css">
+			.center {
+				width: 400;
+				margin: 0 auto;
+			}
+		</style>
 	</head>
-	
 	<body>
-		<h1>Hello World!</h1>
-		
+		<div class="center">
 		<button id="connBtn">Connect</button>
+		<br>
 		<form>
-			<textarea rows="10" cols="10" id="msg"></textarea>
+			<textarea rows="10" cols="80" id="msg"></textarea>
 		</form>
 		<button id="sendBtn">Send</button>
+		</div>
 		<script type="text/javascript" src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 		<script type="text/javascript" src="ws.js"></script>
 	</body>

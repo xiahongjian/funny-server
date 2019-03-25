@@ -1,23 +1,24 @@
 <configuration>
     <property name="LOG_PATH" value="./logs"/>
+    <conversionRule conversionWord="clr" converterClass="tech.hongjian.funnyserver.logback.ConsoleColorPattern" />
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} %L - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %clr(%-5level) %logger{50} %cyan(%L) - %msg%n</pattern>
         </encoder>
     </appender>
 
     <!-- 分日期生成日志仅记录最近30天的日志 -->
     <!-- 仅仅用来记录访问日志不记录错误日志 -->
-    <appender name="ApiInfo" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FunnyServerInfo" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
         <Encoding>UTF-8</Encoding>
-        <File>${LOG_PATH}/api.info.log</File>
+        <File>${LOG_PATH}/funny-server.info.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/api.info.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_PATH}/funny-server.info.%d{yyyy-MM-dd}.log</FileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -25,16 +26,16 @@
         </layout>
     </appender>
 
-    <appender name="ApiError" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FunnyServerError" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
         <Encoding>UTF-8</Encoding>
-        <File>${LOG_PATH}/api.error.log</File>
+        <File>${LOG_PATH}/funny-server.error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/api.error.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_PATH}/funny-server.error.%d{yyyy-MM-dd}.log</FileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -42,16 +43,16 @@
         </layout>
     </appender>
 
-    <appender name="ApiDebug" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FunnyServerDebug" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>DEBUG</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
         <Encoding>UTF-8</Encoding>
-        <File>${LOG_PATH}/api.debug.log</File>
+        <File>${LOG_PATH}/funny-server.debug.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/api.debug.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_PATH}/funny-server.debug.%d{yyyy-MM-dd}.log</FileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -59,10 +60,10 @@
         </layout>
     </appender>
 
-    <logger name="net.mengkang.api" level="debug" additivity="true">
-        <appender-ref ref="ApiInfo"/>
-        <appender-ref ref="ApiError"/>
-        <appender-ref ref="ApiDebug"/>
+    <logger name="tech.hongjian.funnyserver" level="debug" additivity="true">
+        <appender-ref ref="FunnyServerInfo"/>
+        <appender-ref ref="FunnyServerError"/>
+        <appender-ref ref="FunnyServerDebug"/>
     </logger>
 
     <root level="DEBUG">
