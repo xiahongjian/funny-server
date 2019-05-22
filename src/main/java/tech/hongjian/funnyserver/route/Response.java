@@ -10,6 +10,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
+import io.netty.util.ReferenceCountUtil;
 
 /**
  * @author xiahongjian 
@@ -76,7 +77,7 @@ public class Response {
 		return status;
 	}
 	public ByteBuf content() {
+		ReferenceCountUtil.retain(content);
 		return content;
 	}
-	
 }

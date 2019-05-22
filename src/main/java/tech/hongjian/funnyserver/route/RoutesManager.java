@@ -92,8 +92,9 @@ public class RoutesManager {
 				resolveResource(basePath, prefix, files[i]);
 			}
 		} else {
-			routeMap.put(Router.of(joinPath(prefix, basePath, file.getName()), "GET"),
-					StataicResourceMappingHandler.of(file));
+			String uri = joinPath(prefix, basePath, file.getName());
+			routeMap.put(Router.of(uri, "GET"),
+					StataicResourceMappingHandler.instance().add(uri, file));
 		}
 	}
 
