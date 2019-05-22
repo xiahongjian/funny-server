@@ -16,9 +16,11 @@ $(function() {
 				console.log('open');
 			};
 			socket.onclose = function(evt) {
+				isConnect = false;
 				console.log('close');
 			};
 			socket.onmessage = function(evt) {
+				$("#content").append($("<pre></pre>").text(evt.data));
 				console.log(evt.data);
 			};
 		}

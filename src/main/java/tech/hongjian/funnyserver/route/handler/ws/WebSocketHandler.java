@@ -12,4 +12,6 @@ public interface WebSocketHandler {
 	void onText(WebSocketContext ctx);
 	
 	void onDisconnect(WebSocketContext ctx);
+	
+	String getPath();
 }

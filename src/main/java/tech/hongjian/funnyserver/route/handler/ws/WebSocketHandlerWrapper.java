@@ -73,6 +73,7 @@ public class WebSocketHandlerWrapper implements WebSocketHandler {
 	@Override
 	public void onDisconnect(WebSocketContext ctx) {
 		invoke(ctx, OnClose.class);
+		ctx.disconnect();
 	}
 
 	private void invoke(WebSocketContext ctx, Class<? extends Annotation> event) {
@@ -101,6 +102,11 @@ public class WebSocketHandlerWrapper implements WebSocketHandler {
 			throw new RuntimeException("Failed to invoke websocket handle method, in "+ method.getDeclaringClass().getName() + "#" + method.getName());
 		}
 		
+	}
+
+	@Override
+	public String getPath() {
+		return path.get();
 	}
 
 }

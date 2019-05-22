@@ -48,7 +48,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
 			handshaker.close(ctx.channel(), (CloseWebSocketFrame) msg.retain());
 			initHandlerWrapper();
 			CompletableFuture.completedFuture(new WebSocketContext(session, handler))
-					.thenAcceptAsync(handler::onDisconnect);
+					.thenAcceptAsync(handler::onDisconnect, ctx.executor());
 			return;
 		}
 
@@ -76,7 +76,9 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object> {
 				session = new WebSocketSession(ctx);
 				uri = req.uri();
 				initHandlerWrapper();
-				CompletableFuture.completedFuture(new WebSocketContext(session, handler))
+				// TODO 用户身份认证
+				// 获取请求参数中的token并验证
+				CompletableFuture.completedFuture(new WebSocketContext(session, handler, uri))
 						.thenAcceptAsync(handler::onConnect, ctx.executor());
 			}
 		} else {
