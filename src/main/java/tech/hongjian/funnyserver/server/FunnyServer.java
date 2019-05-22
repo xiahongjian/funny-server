@@ -15,17 +15,17 @@ import tech.hongjian.funnyserver.server.handler.ServerInitializer;
  *
  */
 @Slf4j
-public class NettyServer {
+public class FunnyServer {
 	private int port;
 	private boolean supportWebSorcket;
 	
-	public NettyServer(int port, boolean supportWebSocket) {
+	public FunnyServer(int port, boolean supportWebSocket) {
 		this.port = port;
 		this.supportWebSorcket = supportWebSocket;
 	}
 	
-	public static NettyServer instance(int port, boolean supportWebSocket) {
-		return new NettyServer(port, supportWebSocket);
+	public static FunnyServer instance(int port, boolean supportWebSocket) {
+		return new FunnyServer(port, supportWebSocket);
 	}
 	
 	public void start() {
